@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Development Test</title>
+</head>
+<body>
+    <h1>Development Test</h1>
+    <form action="/test/generate" method="post">
+    <fieldset>
+      <legend>Choose a Media Type:</legend>
+      <label><input type="radio" name="media" value="book" required> Book</label><br>
+      <label><input type="radio" name="media" value="game"> Game</label><br>
+      <label><input type="radio" name="media" value="album"> Album</label><br>
+      <label><input type="radio" name="media" value="movie"> Movie</label>
+    </fieldset>
+
+    <br>
+
+    <fieldset>
+      <legend>Choose a Genre:</legend>
+      <label><input type="radio" name="genre" value="fantasy" required> Fantasy</label><br>
+      <label><input type="radio" name="genre" value="sci-fi"> Sci-Fi</label><br>
+      <label><input type="radio" name="genre" value="drama"> Drama</label><br>
+      <label><input type="radio" name="genre" value="comedy"> Comedy</label>
+    </fieldset>
+
+    <br>
+
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

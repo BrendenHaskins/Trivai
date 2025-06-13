@@ -1,16 +1,15 @@
 import app from "../app.js";
 import conn from '../utilities/conn.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const test = (req,res) => {
-    res.status(200);
-    //does this work for all platforms?
-    res.sendFile(app.portableDirectory + "/views/test.html");
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const home = (req,res) => {
     res.status(200);
-    res.sendFile(app.portableDirectory + "/views/index.html");
-}
+    res.sendFile(path.join(__dirname, '..', 'views', 'index.html'));
+};
 
 const generate = async (req,res) => {
     res.status(200);
@@ -22,7 +21,6 @@ const generate = async (req,res) => {
 }
 
 export default {
-    test,
     home,
     generate
 };

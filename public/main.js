@@ -7,29 +7,32 @@ const toHTML = (htmlBlock) => {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+
+    // Default route
+    let currentRoute = "home";
+
     // Client-side router
-    window.getPage = (pageName) => {
-        let pageHTML;
-        const nameToHTML = {
+    window.getPage = (route) => {
+        let routeHTML;
+        const routes = {
             "home": home(),
             "test": test(),
             "results": results(),
         };
 
-        if (pageName in nameToHTML) {
-            currentPage = pageName;
-            pageHTML = nameToHTML[pageName];
+        if (route in routes) {
+            currentRoute = route;
+            routeHTML = routes[route];
         }
         else {
-            pageHTML = fileNotFound(currentPage);
+            routeHTML = fileNotFound(currentRoute);
         }
 
         root.innerHTML = '';
-        root.append(...toHTML(pageHTML));
+        root.append(...toHTML(routeHTML));
     };
 
     //On document load, render homepage
     const root = document.getElementById("root");
-    let currentPage = "home";
-    window.getPage(currentPage);
+    window.getPage(currentRoute);
 });

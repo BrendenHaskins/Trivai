@@ -11,7 +11,7 @@ const navbar = () => {
     `;
 }
 
-export const home = () => {
+export const homePage = () => {
     return /*html*/`
         ${navbar()}
         <div id="home" class="text-center"> 
@@ -22,7 +22,7 @@ export const home = () => {
     `;
 };
 
-export const test = () => {
+export const testPage = () => {
     const field = (name, value) => /*html*/`
         <label><input type="radio" name="${name}" value="${value}" required> ${value.charAt(0).toUpperCase() + value.slice(1)}</label><br>
     `;
@@ -48,12 +48,12 @@ export const test = () => {
     `;
 }
 
-export const results = () => {
+export const resultsPage = () => {
     return /*html*/`
     `;
 }
 
-export const fileNotFound = (prevPage) => {
+export const fileNotFoundPage = (prevPage) => {
     return /*html*/`
         ${navbar()}
         <div id="file-not-found" class="text-center">

@@ -1,4 +1,4 @@
-import { home, test, results, fileNotFound } from "/components.js";
+import { home, test, results, fileNotFound } from "/clientController.js";
 
 const parser = new DOMParser();
 const toHTML = (htmlBlock) => {

@@ -1,5 +1,19 @@
+const navbar = () => {
+    const routes = ["home", "test"];
+
+    const button = (route) => /*html*/`
+        <a class="nav-link" href="#" onclick="getPage('${route}')">${route.charAt(0).toUpperCase() + route.slice(1)}</a>
+    `;
+    return /*html*/`
+        <nav id="nav" class="nav bg-body-tertiary px-5 pt-2">
+            ${routes.map(route => button(route)).join('')}
+        </nav>
+    `;
+}
+
 export const home = () => {
     return /*html*/`
+        ${navbar()}
         <div id="home" class="text-center"> 
             <h1>Trivai</h1>
             <p>I paid a consultant four million dollars to come up with that name</p> <!-- Should've just had AI come up with it 🤦-->
@@ -22,6 +36,7 @@ export const test = () => {
     `;
 
     return /*html*/`
+        ${navbar()}
         <div id="test" class="text-center">
             <h1>Development Test</h1>
             <form action="/test/generate" method="post">
@@ -40,6 +55,7 @@ export const results = () => {
 
 export const fileNotFound = (prevPage) => {
     return /*html*/`
+        ${navbar()}
         <div id="file-not-found" class="text-center">
             <h1>Uh oh! That page couldn't be found.</h1>
             <button class="btn btn-primary" onclick="getPage(${prevPage})">Back</button>

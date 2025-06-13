@@ -7,6 +7,11 @@ const test = (req,res) => {
     res.sendFile(app.portableDirectory + "/views/test.html");
 }
 
+const home = (req,res) => {
+    res.status(200);
+    res.sendFile(app.portableDirectory + "/views/index.html");
+}
+
 const generate = async (req,res) => {
     res.status(200);
     const media = req.body.media;
@@ -18,5 +23,6 @@ const generate = async (req,res) => {
 
 export default {
     test,
+    home,
     generate
 };

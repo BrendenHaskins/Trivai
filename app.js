@@ -22,6 +22,8 @@ const portableDirectory = __dirname;
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/test', testRouter)
 
 app.get("/", (req,res) => {

@@ -5,7 +5,7 @@ const navbar = () => {
         <a class="nav-link" href="#" onclick="getPage('${route}')">${route.charAt(0).toUpperCase() + route.slice(1)}</a>
     `;
     return /*html*/`
-        <nav id="nav" class="nav bg-body-tertiary px-5 pt-2">
+        <nav id="nav" class="nav bg-body-tertiary px-5 py-2">
             ${routes.map(route => button(route)).join('')}
         </nav>
     `;
@@ -41,9 +41,9 @@ export const pretestInputPage = () => {
         <div id="pretest" class="text-center m-4">
             <h1>Development Test</h1>
             <form action="#" id="pretest-input">
-            ${fieldSet("media",["book","game","album","movie"])}
-            ${fieldSet("genre",["fantasy","sci-fi","drama","comedy"])}
-            <button onclick="getPage('./test-1')">Submit</button>
+                ${fieldSet("media",["book","game","album","movie"])}
+                ${fieldSet("genre",["fantasy","sci-fi","drama","comedy"])}
+                <button class="btn btn-primary" onclick="getPage('./test-1')">Submit</button>
             </form>
         </div>
     `;
@@ -59,7 +59,7 @@ const question = (item, questionNum) => {
     const seed = Math.floor(Math.random() * 4);
     const order =  [seed % 4, (seed + 1) % 4, (seed + 2) % 4, (seed + 3) % 4];
     return /*html*/`
-        <div class="m-4">
+        <div class="m-3">
             <h4>${item[item.length-1]}</h4>
             ${order.map(index => answer(item[index], questionNum)).join('<br>')}
 
@@ -72,7 +72,7 @@ const testBody = (items, nextPage, message) => {
         ${navbar()}
         <form id="test" class="text-center" style="padding-bottom: 30vh;">
             ${items.map((item, questionNum) => question(item, questionNum)).join('<br>')}
-            <button class="mt-5" onclick="getPage('${nextPage}')">${message}</button>
+            <button class="btn btn-primary mt-5" onclick="getPage('${nextPage}')">${message}</button>
         </form>
     `;
 }
@@ -100,7 +100,7 @@ export const resultsPage = (results) => { // results = [ ["question", "playerAns
     return /*html*/`
         ${navbar()}
         <div id="results" class="container">
-            <table class="col table table-bordered p-2 mx-auto w-50">
+            <table class="col table table-bordered p-2 mx-auto mt-4 w-50">
                 <thead>
                     <tr>
                         <th class="col-4">❓ Question</th>
@@ -113,7 +113,7 @@ export const resultsPage = (results) => { // results = [ ["question", "playerAns
                 </tbody>
             </table>
 
-            <button onclick="getPage('test')">Play Again</button>
+            <div class="d-flex justify-content-center"><button onclick="getPage('test')" class="btn btn-primary">Play Again</button></div>
         </div>
     `;
 }

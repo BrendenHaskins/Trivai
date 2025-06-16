@@ -19,6 +19,7 @@ export const home = () => {
 // Micro router/controller for test paths
 export const test = async (path) => {
     const route = pathParser(path);
+    const res2 = await getQuestions("");
     switch (route[0][1]) {
         case "pretest": // Sync
             return pretestInputPage();
@@ -37,7 +38,7 @@ export const test = async (path) => {
             return testOne(res);
 
         case "test-2":
-            return testTwo();
+            return testTwo(res2);
 
         default:
             return pretestInputPage();

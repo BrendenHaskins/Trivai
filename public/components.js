@@ -17,7 +17,7 @@ export const homePage = () => {
         <div id="home" class="text-center m-4"> 
             <h1>Trivai</h1>
             <p>I paid a consultant four million dollars to come up with that name</p> <!-- Should've just had AI come up with it 🤦-->
-            <button class="btn btn-primary" onclick="getPage('test/pretest')">Test</button>
+            <button type="button" class="btn btn-primary" onclick="getPage('test/pretest')">Test</button>
         </div>
     `;
 };
@@ -43,7 +43,7 @@ export const pretestInputPage = () => {
             <form action="#" id="pretest-input">
                 ${fieldSet("media",["book","game","album","movie"])}
                 ${fieldSet("genre",["fantasy","sci-fi","drama","comedy"])}
-                <button class="btn btn-primary" onclick="getPage('./test-1')">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="getPage('test/test-1')">Submit</button>
             </form>
         </div>
     `;
@@ -72,7 +72,7 @@ const testBody = (items, nextPage, message) => {
         ${navbar()}
         <form id="test" class="text-center" style="padding-bottom: 30vh;">
             ${items.map((item, questionNum) => question(item, questionNum)).join('<br>')}
-            <button class="btn btn-primary mt-5" onclick="getPage('${nextPage}')">${message}</button>
+            <button type="button" class="btn btn-primary mt-5" onclick="getPage('${nextPage}')">${message}</button>
         </form>
     `;
 }
@@ -123,8 +123,8 @@ export const fileNotFoundPage = (prevPage) => {
         ${navbar()}
         <div id="file-not-found" class="text-center">
             <h1>Uh oh! That page couldn't be found.</h1>
-            <button class="btn btn-primary" onclick="getPage('${prevPage}')">Back</button>
-            <button class="btn btn-primary" onclick="getPage('home')">Home</button>
+            <button type="button" class="btn btn-primary" onclick="getPage('${prevPage}')">Back</button>
+            <button type="button" class="btn btn-primary" onclick="getPage('home')">Home</button>
         </div>
     `;
 }

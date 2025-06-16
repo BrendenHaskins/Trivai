@@ -22,19 +22,20 @@ export const homePage = () => {
     `;
 };
 
-export const testPage = () => {
-    const field = (name, value) => /*html*/`
-        <label><input type="radio" name="${name}" value="${value}" required> ${value.charAt(0).toUpperCase() + value.slice(1)}</label><br>
-    `;
 
-    const fieldSet = (name, values) => /*html*/`
-        <fieldset> 
-            <legend>Choose a ${name}:</legend>
-            ${values.map((value) => field(name, value)).join('')}
-        </fieldset>
-        <br>
-    `;
+const field = (name, value) => /*html*/`
+    <label><input type="radio" name="${name}" value="${value}" required> ${value.charAt(0).toUpperCase() + value.slice(1)}</label><br>
+`;
 
+const fieldSet = (name, values) => /*html*/`
+    <fieldset> 
+        <legend>Choose a ${name}:</legend>
+        ${values.map((value) => field(name, value)).join('')}
+    </fieldset>
+    <br>
+`;
+
+export const pretestInputPage = () => {
     return /*html*/`
         ${navbar()}
         <div id="test" class="text-center">

@@ -14,10 +14,10 @@ const navbar = () => {
 export const homePage = () => {
     return /*html*/`
         ${navbar()}
-        <div id="home" class="text-center"> 
+        <div id="home" class="text-center m-4"> 
             <h1>Trivai</h1>
             <p>I paid a consultant four million dollars to come up with that name</p> <!-- Should've just had AI come up with it 🤦-->
-            <button class="btn btn-primary" onclick="getPage('test')">Test</button>
+            <button class="btn btn-primary" onclick="getPage('test/pretest')">Test</button>
         </div>
     `;
 };
@@ -30,7 +30,7 @@ const field = (name, value) => /*html*/`
 const fieldSet = (name, values) => /*html*/`
     <fieldset> 
         <legend>Choose a ${name}:</legend>
-        ${values.map((value) => field(name, value)).join('')}
+        ${values.map(value => field(name, value)).join('')}
     </fieldset>
     <br>
 `;
@@ -38,26 +38,83 @@ const fieldSet = (name, values) => /*html*/`
 export const pretestInputPage = () => {
     return /*html*/`
         ${navbar()}
-        <div id="pretest" class="text-center">
+        <div id="pretest" class="text-center m-4">
             <h1>Development Test</h1>
             <form action="#" id="pretest-input">
             ${fieldSet("media",["book","game","album","movie"])}
             ${fieldSet("genre",["fantasy","sci-fi","drama","comedy"])}
-            <button onclick="getPage('test', 'test-1')">Submit</button>
+            <button onclick="getPage('./test-1')">Submit</button>
             </form>
         </div>
     `;
 }
 
-export const testBody = (items) => {
+const answer = (answer, questionNum) => {
     return /*html*/`
-        ${navbar()}
-        <pre>${JSON.stringify(items, null, 2)}</pre>
+        <label><input class="mx-2" type="radio" name="question-${questionNum}", value="${answer}" required> ${answer}</label>
     `;
 }
 
-export const resultsPage = () => {
+const question = (item, questionNum) => {
+    const seed = Math.floor(Math.random() * 4);
+    const order =  [seed % 4, (seed + 1) % 4, (seed + 2) % 4, (seed + 3) % 4];
     return /*html*/`
+        <div class="m-4">
+            <h4>${item[item.length-1]}</h4>
+            ${order.map(index => answer(item[index], questionNum)).join('<br>')}
+
+        </div>
+    `;
+}
+
+const testBody = (items, nextPage, message) => {
+    return /*html*/`
+        ${navbar()}
+        <form id="test" class="text-center" style="padding-bottom: 30vh;">
+            ${items.map((item, questionNum) => question(item, questionNum)).join('<br>')}
+            <button class="mt-5" onclick="getPage('${nextPage}')">${message}</button>
+        </form>
+    `;
+}
+
+export const testOne = (items) => {
+    return testBody(items, "test/test-2", "Next Page");
+}
+
+export const testTwo = (items) => {
+    return testBody(items, "results", "Submit");
+}
+
+const renderResult = (result) => {
+    const [question, answer, correct] = result;
+    return /*html*/`
+        <tr>
+            <td>${question}</td>
+            <td>${answer}</td>
+            <td>${correct}</td>
+        </tr>
+    `;
+}
+
+export const resultsPage = (results) => { // results = [ ["question", "playerAnswer", "correctAnswer"], ... ];
+    return /*html*/`
+        ${navbar()}
+        <div id="results" class="container">
+            <table class="col table table-bordered p-2 mx-auto w-50">
+                <thead>
+                    <tr>
+                        <th class="col-4">❓ Question</th>
+                        <th class="col-4">🙋 Your Answer</th>
+                        <th class="col-4">✅ | ❌ Correct Answer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${results.map(result => renderResult(result)).join('')}
+                </tbody>
+            </table>
+
+            <button onclick="getPage('test')">Play Again</button>
+        </div>
     `;
 }
 
@@ -66,7 +123,7 @@ export const fileNotFoundPage = (prevPage) => {
         ${navbar()}
         <div id="file-not-found" class="text-center">
             <h1>Uh oh! That page couldn't be found.</h1>
-            <button class="btn btn-primary" onclick="getPage(${prevPage})">Back</button>
+            <button class="btn btn-primary" onclick="getPage('${prevPage}')">Back</button>
             <button class="btn btn-primary" onclick="getPage('home')">Home</button>
         </div>
     `;

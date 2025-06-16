@@ -1,17 +1,25 @@
 import { 
     homePage, 
     pretestInputPage,
-    testBody,
+    testOne,
+    testTwo,
     resultsPage, 
     fileNotFoundPage,
 } from "/components.js";
+
+import {
+    getQuestions,
+    pathParser
+} from "/utils.js";
 
 export const home = () => {
     return homePage();
 }
 
-export const test = async (subroute) => {
-    switch (subroute) {
+// Micro router/controller for test paths
+export const test = async (path) => {
+    const route = pathParser(path);
+    switch (route[0][1]) {
         case "pretest": // Sync
             return pretestInputPage();
 
@@ -21,21 +29,25 @@ export const test = async (subroute) => {
                 media: pretestInput['media'].value,
                 genre: pretestInput['genre'].value,
             };
-            const res = await $.post("/generate", reqBody);
-            return testBody(res);
+
+            // const aiGen = await $.post("/generate", reqBody); // "Prod"
+            const aiGen = ""; // "Test"
+
+            const res = await getQuestions(aiGen);
+            return testOne(res);
 
         case "test-2":
-            return testBody();
-            
+            return testTwo();
+
         default:
             return pretestInputPage();
     }
 }
 
 export const results = () => {
-    return resultsPage();
+    return resultsPage([""]); //
 }
 
-export const fileNotFound = (prevPage) => {
-    return fileNotFoundPage(prevPage);
+export const fileNotFound = (path) => {
+    return fileNotFoundPage(path);
 }

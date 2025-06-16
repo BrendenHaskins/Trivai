@@ -1,4 +1,5 @@
 import { home, test, results, fileNotFound } from "/clientController.js";
+import { pathParser, routeParser } from "/utils.js";
 
 const parser = new DOMParser();
 const toHTML = (htmlBlock) => {
@@ -9,30 +10,41 @@ const toHTML = (htmlBlock) => {
 window.addEventListener("DOMContentLoaded", () => {
 
     // Default route
-    let currentRoute = "home";
+    let currentPath = "/home";
 
     // Client-side router
-    window.getPage = async (route, subroute) => {
-        let routeHTML;
+    window.getPage = async (path) => {
+        let routeFunction;
         const routes = {
-            "home": home(),
-            "test": await test(subroute),
-            "results": results(),
+            "home": () => home(currentPath),
+            "test": async () => await test(currentPath),
+            "results": () => results(currentPath),
         };
 
-        if (route in routes) {
-            currentRoute = route;
-            routeHTML = routes[route];
-        }
-        else {
-            routeHTML = fileNotFound(currentRoute);
+        const [route, relative] = pathParser(path); // Get array (pagination) from string (path)
+        if (relative) {
+            // If relative path such as ./test-1, append one level up
+            const [currentRoute, ] = pathParser(currentPath);
+            currentRoute.splice(-1);
+            currentPath = routeParser([...currentRoute, ...route]); // Append new route to current route (at same level)
+            routeFunction = routes[pathParser(currentPath)[0][0]];
+        } else {
+            if (route[0] in routes) {
+                currentPath = routeParser(route);
+                routeFunction = routes[pathParser(currentPath)[0][0]];
+            }
+            else {
+                // Otherwise 404
+                routeFunction = fileNotFound(getCurrentPath);
+            }
         }
 
+        const routeHTML = await routeFunction();
         root.innerHTML = '';
         root.append(...toHTML(routeHTML));
     };
 
     //On document load, render homepage
     const root = document.getElementById("root");
-    window.getPage(currentRoute);
+    window.getPage(currentPath);
 });

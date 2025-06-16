@@ -1,4 +1,4 @@
-import getJsonStringTemplate from "./mediaTypes.js";
+import getPrompt from "./mediaTypes.js";
 
 //no god fearing society should make me write my own wait function 
 function wait(ms) {
@@ -57,11 +57,7 @@ async function groqQuery(prompt, key) {
  */
 async function generateJSON(media, genre, key, backoff, previousTitles) {
   
-  const promptStr = `You are running trivia night. Please output only a JSON object representing a ${genre} genre ${media}.
-    Do not choose the following ${media}s: ${previousTitles}
-    For each attribute in the provided JSON template, generate four values in an array.
-    have the actual value come first, followed by three fakes. Make all fake values realistic. ${getJsonStringTemplate(media)}
-    Do not respond with any text before or after - just the JSON object in it's correct form.`;
+  const promptStr = getPrompt(media,genre)
 
     let output;
     let parsed;

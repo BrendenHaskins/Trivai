@@ -3,8 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import path from 'path';
 import url from 'url';
-import generateJSON from './utilities/conn.js';
-import testRouter from './routers/testRouter.js'
+import router from './routers/router.js'
 
 const app = express();
 
@@ -24,17 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/test', testRouter)
-
-app.get("/", (req,res) => {
-    res.status(200);
-    res.send("you've reached trivai")
-})
+app.use('/', router)
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`))
-
-//const dev_test = await generateJSON.generateJSON("game", "shooter", KEY);
-//console.log(dev_test);
 
 export default {
     portableDirectory,

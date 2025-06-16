@@ -40,7 +40,7 @@ export const pretestInputPage = () => {
         ${navbar()}
         <div id="test" class="text-center">
             <h1>Development Test</h1>
-            <form action="/test/generate" method="post">
+            <form action="/generate" method="post">
             ${fieldSet("media",["book","game","album","movie"])}
             ${fieldSet("genre",["fantasy","sci-fi","drama","comedy"])}
             <button type="submit">Submit</button>

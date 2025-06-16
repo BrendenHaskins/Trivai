@@ -12,11 +12,11 @@ window.addEventListener("DOMContentLoaded", () => {
     let currentRoute = "home";
 
     // Client-side router
-    window.getPage = (route, subroute) => {
+    window.getPage = async (route, subroute) => {
         let routeHTML;
         const routes = {
             "home": home(),
-            "test": test(subroute),
+            "test": await test(subroute),
             "results": results(),
         };
 

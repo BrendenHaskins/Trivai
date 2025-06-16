@@ -1,21 +1,32 @@
-import { homePage, pretestInputPage, resultsPage, fileNotFoundPage } from "/components.js";
-/*
-    Not in serious use yet, but will be nice to have a layer that 
-    separates presentation from state management.
-*/
+import { 
+    homePage, 
+    pretestInputPage,
+    testBody,
+    resultsPage, 
+    fileNotFoundPage,
+} from "/components.js";
 
 export const home = () => {
     return homePage();
 }
 
-export const test = (subroute) => {
+export const test = async (subroute) => {
     switch (subroute) {
-        case "pretest":
+        case "pretest": // Sync
             return pretestInputPage();
-        case "test-1":
-            return testPartOne();
+
+        case "test-1": // Async
+            const pretestInput = document.getElementById("pretest-input");
+            const reqBody = {
+                media: pretestInput['media'].value,
+                genre: pretestInput['genre'].value,
+            };
+            const res = await $.post("/generate", reqBody);
+            return testBody(res);
+
         case "test-2":
-            return testPartTwo();
+            return testBody();
+            
         default:
             return pretestInputPage();
     }

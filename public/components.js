@@ -38,14 +38,21 @@ const fieldSet = (name, values) => /*html*/`
 export const pretestInputPage = () => {
     return /*html*/`
         ${navbar()}
-        <div id="test" class="text-center">
+        <div id="pretest" class="text-center">
             <h1>Development Test</h1>
-            <form action="/generate" method="post">
+            <form action="#" id="pretest-input">
             ${fieldSet("media",["book","game","album","movie"])}
             ${fieldSet("genre",["fantasy","sci-fi","drama","comedy"])}
-            <button type="submit">Submit</button>
+            <button onclick="getPage('test', 'test-1')">Submit</button>
             </form>
         </div>
+    `;
+}
+
+export const testBody = (items) => {
+    return /*html*/`
+        ${navbar()}
+        <pre>${JSON.stringify(items, null, 2)}</pre>
     `;
 }
 

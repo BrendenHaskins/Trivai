@@ -12,7 +12,7 @@ import {
     pathParser
 } from "/utils.js";
 
-import state from "/store.js";
+import state from "/state.js";
 
 export const home = () => {
     return homePage();
@@ -27,26 +27,28 @@ export const test = async (path) => {
 
         case "test-1": // Async
             const pretestInput = document.getElementById("pretest-input");
-            const reqBody = {
+
+            state.pretest = {
                 media: pretestInput['media'].value,
                 genre: pretestInput['genre'].value,
             };
 
-            const inputMedia = await $.post("/generate", reqBody); 
-            const questions = await getQuestions(inputMedia);
+            state.inputMedia = await $.post("/generate", state.pretest); 
+            state.questions = await getQuestions(state.inputMedia);
 
-            state.questions = questions;
-            state.inputMedia = inputMedia;
-
-            return testOne(questions);
+            return testOne();
 
         case "test-2":
-            // const testInputOne = document.getElementById("test");
-            // document.querySelectorAll('input[name^="question-"]:checked').forEach((input, i) => {
-            //     state.answers.push(input.value === state.questions[i][0]);
-            // });
-            // console.log(state.answers);
-            return testTwo(res);
+            document.querySelectorAll('input[name^="question-"]:checked').forEach((input, i) => {
+                state.results.push({ 
+                    question: state.questions[i][4], 
+                    answer: input.value,
+                    correct: state.questions[i][0],
+                });
+            });
+            console.log(state.results);
+            // Todo: Get more questions, make it easier/harder
+            return testTwo();
 
         default:
             return pretestInputPage();

@@ -1,7 +1,7 @@
-export const state = {
+export default {
     questions: [],
     inputMedia: [],
-    answers: [],
+    results: [],
     pretest: {
         media: "",
         genre: "",

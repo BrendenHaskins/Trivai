@@ -1,3 +1,5 @@
+import state from "/state.js";
+
 const navbar = () => {
     const routes = ["home", "test"];
 
@@ -78,11 +80,12 @@ const testBody = (items, nextPage, message) => {
     `;
 }
 
-export const testOne = (items) => {
-    return testBody(items, "test/test-2", "Next Page");
+export const testOne = () => {
+    return testBody(state.questions, "test/test-2", "Next Page");
 }
 
-export const testTwo = (items) => {
+export const testTwo = () => {
+    const items = state.questions.slice(state.results.length);
     return testBody(items, "results", "Submit");
 }
 

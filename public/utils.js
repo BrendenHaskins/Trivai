@@ -1,4 +1,6 @@
-export const getQuestions = async (inputMedia) => {
+import state from "/state.js";
+
+export const getQuestions = async () => {
 
     // // Test data
     // Sample question input data looks like: 
@@ -33,7 +35,7 @@ export const getQuestions = async (inputMedia) => {
 
     // Parallel - use for faster load times
     const res = await Promise.all(
-        Object.values(inputMedia).map((media) =>
+        Object.values(state.inputMedia).map((media) =>
             fetch('/question', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

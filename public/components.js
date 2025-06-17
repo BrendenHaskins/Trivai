@@ -42,7 +42,9 @@ export const pretestInputPage = () => {
             <h1>Development Test</h1>
             <form action="#" id="pretest-input">
                 ${fieldSet("media",["book","game","album","movie"])}
-                ${fieldSet("genre",["fantasy","sci-fi","drama","comedy"])}
+                <label>Enter a genre: (A single word works better!)<br>
+                <input type="text" name="genre" required>
+                </label>
                 <button type="button" class="btn btn-primary" onclick="getPage('test/test-1')">Submit</button>
             </form>
         </div>

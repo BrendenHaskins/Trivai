@@ -6,12 +6,16 @@ const questionJSONTemplate = `
 ]
 `
 
+// const exampleQuestion = `
+// [
+//     questions = [
+//         ["Star Wars", "Dune", "Star Trek", "Halo", "What Sci-Fi Series did George Lucas create?"]
+//     ]
+// ]
+// `
+//For some reason this produces more consistent results
 const exampleQuestion = `
-[
-    question = [
-        ["Star Wars", "Dune", "Star Trek", "Halo", "What Sci-Fi Series did George Lucas create?"]
-    ]
-]
+    ["Star Wars", "Dune", "Star Trek", "Halo", "What Sci-Fi Series did George Lucas create?"]
 `
 
 const book = `
@@ -166,7 +170,7 @@ function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier) {
 
     Do not use any previously asked questions, or questions similar to these: ${prev}.
 
-    Here is the object to base the question on. ${mediaObject}.
+    Here is the object to base the question on. ${JSON.stringify(mediaObject, null, 2)}.
     `
 
     console.log(prompt);

@@ -31,11 +31,11 @@ export const test = async (path) => {
                 genre: pretestInput['genre'].value,
             };
 
-            // const aiGen = await $.post("/generate", reqBody); // "Prod"
-            const aiGen = ""; // "Test"
+            const inputMedia = await $.post("/generate", reqBody); // "Prod"
+            // const aiGen = ""; // "Test"
 
-            const res = await getQuestions(aiGen);
-            return testOne(res);
+            const questions = await getQuestions(inputMedia);
+            return testOne(questions);
 
         case "test-2":
             return testTwo(res2);

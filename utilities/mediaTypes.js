@@ -1,3 +1,19 @@
+const questionJSONTemplate = `
+[
+    question = [
+        ["Correct Answer", "Incorrect Answer", "Incorrect Answer", "Incorrect Answer", "Question"]
+    ]
+]
+`
+
+const exampleQuestion = `
+[
+    question = [
+        ["Star Wars", "Dune", "Star Trek", "Halo", "What Sci-Fi Series did George Lucas create?"]
+    ]
+]
+`
+
 const book = `
 book {
     title
@@ -54,31 +70,10 @@ function getJsonStringTemplate(media) {
     }
 }
 
-function getPrompt(media, genre, previousTitles) {
-    const currentYear = new Date().getFullYear();
-    const prev = "";
-    if(Array.isArray(previousTitles && previousTitles.length > 0)) {
-        prev = JSON.stringify(previousTitles, null, 2);
-    }
-
-    const shared = `
-    You are hosting a trivia night.
-
-    Return only a **single JSON object** related to the **${genre}** genre and based on the **${media}** format.
-
-    Do **not** include any explanation, text, or formatting outside the JSON.
-
-    Do **not** include any of these titles: ${prev}
-
-    For each key in the following JSON template:
-    - Generate an array of four values.
-    - The **correct answer must come first**, followed by **three realistic but incorrect alternatives**.
-    - All values should be plausible within the given genre and media.
-
-    Here is the JSON structure you must follow:
-    ${getJsonStringTemplate(media)}
-    `;
-
+/**
+ * @deprecated specific prompting is no longer used.
+ */
+function getSpecificPrompt(media) {
     let specific = "";
     switch (media) {
         case "book":
@@ -116,7 +111,69 @@ function getPrompt(media, genre, previousTitles) {
             throw new Error(`No specific prompt for media: ${media}`);
     }
 
-    return shared + specific;
+    return specific;
 }
 
-export default getPrompt;
+function getPrompt(media, genre, previousTitles) {
+    const prev = previousTitles ?? "None used yet";
+
+    const prompt = `
+    You are hosting a trivia night.
+
+    Return only a **JSON Array** containing four ${media}s of the ${genre} genre.
+
+    Do **not** include any explanation, text, or formatting outside the JSON.
+
+    Do **not** include any of these previously used titles: ${prev}
+
+    For each key in the following JSON template, use the **correct answer.**
+
+    Here is the JSON structure you must follow for each of the four ${media}s:
+    ${getJsonStringTemplate(media)}
+    `;
+    
+
+    return prompt;
+}
+
+function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier) {
+    const prev = previousQuestions ?? "None used yet";
+
+    let diff;
+    switch(difficultyModifier) {
+        case "easy":
+            diff = "Please make the questions easier.";
+        case "hard":
+            diff = "Please make the questions more difficult.";
+        default:
+            diff = "";
+    }
+
+    const prompt = `
+    You are hosting a trivia night.
+
+    Given the provided object, generate a triva question. 
+
+    ${diff}
+
+    return only a ** JSON object** like so: ${questionJSONTemplate}
+
+    Do **not** include any explanation, text, or formatting outside the JSON.
+
+    Here's an example: ${exampleQuestion}
+
+    Make all incorrect answers plausible, and do not insert any jokes.
+
+    Do not use any previously asked questions, or questions similar to these: ${prev}.
+
+    Here is the object to base the question on. ${mediaObject}.
+    `
+
+    console.log(prompt);
+    return prompt;
+}
+
+export default {
+    getPrompt,
+    getQuestionPrompt
+};

@@ -1,4 +1,4 @@
-import getPrompt from "./mediaTypes.js";
+import mediaUtil from "./mediaTypes.js";
 
 //no god fearing society should make me write my own wait function 
 function wait(ms) {
@@ -47,26 +47,53 @@ async function groqQuery(prompt, key) {
 }
 
 /**
- * Constructs a prompt to make a call to Groq via groqQuery()
+ * Constructs a prompt to make a call to Groq via groqQuery() with the aim of getting media JSON back
  * @param {*} media the media type (see mediaTypes.js)
  * @param {*} genre the genre of that media
  * @param {*} key the api key to pass
  * @param {*} backoff wait time in ms
- * @param {*} previousTitles titles already returned
- * @returns an object with array fields according to that media type, with a correct value in position zero, followed by three fake values
+ * @param {*} prev titles already returned
+ * @returns an object with four medias contained within it.
  */
-async function generateJSON(media, genre, key, backoff, previousTitles) {
-  
-  const promptStr = getPrompt(media,genre)
+async function generateJSON(media, genre, key, prev) {
+  const promptStr = mediaUtil.getPrompt(media,genre,prev);
 
+  return requestLayer(promptStr,0,key);
+}
+
+/**
+ * Constructs a prompt to make a call to Groq via groqQuery() with the aim of getting question JSON back
+ * @param {*} mediaObject the mediaObject JSON to base the questions
+ * @param {*} key the api key to pass
+ * @param {*} backoff wait time in ms
+ * @param {*} prev titles already returned
+ * @returns an object with array field containing a correct answer, three incorrect answers, and a question
+ */
+async function generateQuestion(mediaObject, key, prev, difficultyModifier) {
+  const promptStr = mediaUtil.getQuestionPrompt(mediaObject, prev, difficultyModifier);
+
+  return requestLayer(promptStr,0,key);
+}
+
+/**
+ * Layer of abstraction to allow question and media requests to implement backoff and simple error handling
+ * @param {*} prompt LLM prompt
+ * @param {*} backoff current backoff in ms 
+ * @param {*} key api key
+ * @returns the parsed output from Groq
+ */
+async function requestLayer(prompt, backoff, key) {
     let output;
     let parsed;
+
     try {
-      output = await groqQuery(promptStr, key);
+      output = await groqQuery(prompt, key);
     } catch (err) {
       //groq service did not respond - incrementally backoff
-      console.log(`Error in groqQuery: ${err}`);
-      const newBackoff = Math.max(backoff,50) * 2
+      const ensuredBackoff = Math.max(backoff, 50);
+      const newBackoff = ensuredBackoff*2;
+
+      console.log(`Error in groqQuery (curr backoff ${newBackoff}): ${err}`);
 
       if(newBackoff > 60000) {
        //no reasonable person should be expected to wait an entire minute. at this point we're cooked
@@ -74,7 +101,7 @@ async function generateJSON(media, genre, key, backoff, previousTitles) {
       }
 
       await wait(newBackoff);
-      return generateJSON(media, genre, key, newBackoff, previousTitles);
+      return requestLayer(prompt, newBackoff, key);
     }
     try {
       let clean = cleanReponse(output)
@@ -82,7 +109,7 @@ async function generateJSON(media, genre, key, backoff, previousTitles) {
     } catch (err) {
       console.log(`Error in parse: ${err}`);
       //groq service responds - but it is not JSON parsable. no need to backoff
-      return generateJSON(media, genre, key, backoff)
+      return requestLayer(prompt, key, backoff)
     }
 
     return parsed;
@@ -102,6 +129,6 @@ function cleanReponse(response) {
 }
 
 export default {
-  groqQuery,
-  generateJSON
+  generateJSON,
+  generateQuestion
 };

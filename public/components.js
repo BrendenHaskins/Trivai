@@ -64,7 +64,6 @@ const question = (item, questionNum) => {
         <div class="m-3">
             <h4>${item[item.length-1]}</h4>
             ${order.map(index => answer(item[index], questionNum)).join('<br>')}
-
         </div>
     `;
 }

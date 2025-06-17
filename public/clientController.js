@@ -12,6 +12,8 @@ import {
     pathParser
 } from "/utils.js";
 
+import state from "/store.js";
+
 export const home = () => {
     return homePage();
 }
@@ -19,7 +21,6 @@ export const home = () => {
 // Micro router/controller for test paths
 export const test = async (path) => {
     const route = pathParser(path);
-    const res2 = await getQuestions("");
     switch (route[0][1]) {
         case "pretest":
             return pretestInputPage();
@@ -31,14 +32,21 @@ export const test = async (path) => {
                 genre: pretestInput['genre'].value,
             };
 
-            const inputMedia = await $.post("/generate", reqBody); // "Prod"
-            // const aiGen = ""; // "Test"
-
+            const inputMedia = await $.post("/generate", reqBody); 
             const questions = await getQuestions(inputMedia);
+
+            state.questions = questions;
+            state.inputMedia = inputMedia;
+
             return testOne(questions);
 
         case "test-2":
-            return testTwo(res2);
+            // const testInputOne = document.getElementById("test");
+            // document.querySelectorAll('input[name^="question-"]:checked').forEach((input, i) => {
+            //     state.answers.push(input.value === state.questions[i][0]);
+            // });
+            // console.log(state.answers);
+            return testTwo(res);
 
         default:
             return pretestInputPage();

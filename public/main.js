@@ -2,7 +2,7 @@ import { home, test, results, fileNotFound } from "/clientController.js";
 import { pathParser, routeParser } from "/utils.js";
 
 /*
-    I went a overboard with my frontend architecture since I wanted an excuse 
+    I went overboard with my frontend architecture since I wanted an excuse 
     to explore some of the more technical aspects of non-react SPAs a bit further. 
     If anything is hard to follow, just let me know and I can clarify.
     - Ethan
@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", () => {
             }
             else {
                 // Otherwise 404
-                routeFunction = fileNotFound(getCurrentPath);
+                routeFunction = () => fileNotFound(currentPath);
             }
         }
 

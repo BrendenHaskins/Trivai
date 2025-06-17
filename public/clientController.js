@@ -21,7 +21,7 @@ export const test = async (path) => {
     const route = pathParser(path);
     const res2 = await getQuestions("");
     switch (route[0][1]) {
-        case "pretest": // Sync
+        case "pretest":
             return pretestInputPage();
 
         case "test-1": // Async

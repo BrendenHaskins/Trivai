@@ -2,10 +2,10 @@ const navbar = () => {
     const routes = ["home", "test"];
 
     const button = (route) => /*html*/`
-        <a class="nav-link" href="#" onclick="getPage('${route}')">${route.charAt(0).toUpperCase() + route.slice(1)}</a>
+        <a class="accent nav-link" href="#" onclick="getPage('${route}')">${route.charAt(0).toUpperCase() + route.slice(1)}</a>
     `;
     return /*html*/`
-        <nav id="nav" class="nav bg-body-tertiary px-5 py-2">
+        <nav id="nav" class="accent nav px-5 py-2">
             ${routes.map(route => button(route)).join('')}
         </nav>
     `;
@@ -100,7 +100,7 @@ export const resultsPage = (results) => { // results = [ ["question", "playerAns
     return /*html*/`
         ${navbar()}
         <div id="results" class="container">
-            <table class="col table table-bordered p-2 mx-auto mt-4 w-50">
+            <table class="accent-lite col table table-bordered p-2 mx-auto mt-4 w-50">
                 <thead>
                     <tr>
                         <th class="col-4">❓ Question</th>

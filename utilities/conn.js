@@ -90,7 +90,7 @@ async function requestLayer(prompt, backoff, key) {
       output = await groqQuery(prompt, key);
     } catch (err) {
       //groq service did not respond - incrementally backoff
-      const ensuredBackoff = Math.max(backoff, 50);
+      const ensuredBackoff = Math.max(backoff, 100);
       const newBackoff = ensuredBackoff*2;
 
       console.log(`Error in groqQuery (curr backoff ${newBackoff}): ${err}`);
@@ -107,9 +107,20 @@ async function requestLayer(prompt, backoff, key) {
       let clean = cleanReponse(output)
       parsed = JSON.parse(clean)
     } catch (err) {
-      console.log(`Error in parse: ${err}`);
-      //groq service responds - but it is not JSON parsable. no need to backoff
-      return requestLayer(prompt, key, backoff)
+      //groq service responds - but it is not JSON parsable. smaller backoff
+      const ensuredBackoff = Math.max(backoff, 100);
+      const newBackoff = ensuredBackoff+10;
+
+
+      console.log(`Error in parse (curr backoff ${newBackoff}): ${err}`);
+
+      if(newBackoff > 60000) {
+       //ditto
+       throw new Error("Groq refused to return a parsable response...");
+      }
+
+      await wait(newBackoff)
+      return requestLayer(prompt, newBackoff, key)
     }
 
     return parsed;

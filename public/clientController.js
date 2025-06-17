@@ -34,7 +34,7 @@ export const test = async (path) => {
             };
 
             state.inputMedia = await $.post("/generate", state.pretest); 
-            state.questions = await getQuestions(state.inputMedia);
+            state.questions = await getQuestions();
 
             return testOne();
 
@@ -46,6 +46,13 @@ export const test = async (path) => {
                     correct: state.questions[i][0],
                 });
             });
+
+            const percentCorrect = state.results.reduce((grade, cur) => {
+                return cur.answer === cur.correct;
+            }) / state.results.length;
+
+            state.questions.push([getQuestions()])
+
             console.log(state.results);
             // Todo: Get more questions, make it easier/harder
             return testTwo();

@@ -39,7 +39,7 @@ export const getQuestions = async () => {
             fetch('/question', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mediaObject: media }),
+            body: JSON.stringify({ mediaObject: media, mediaType: state.pretest.media }),
             }).then((res) => res.json())
             .then((res) => res[0])
         )

@@ -28,6 +28,13 @@ book {
 }
 `;
 
+const bookAttr = [
+    "author",
+    "isNewYorkTimesBestSeller",
+    "copiesSold",
+    "oneSentencePlotSummary",
+];
+
 const movie = `
 movie {
     title
@@ -39,14 +46,30 @@ movie {
 }
 `;
 
+const movieAttr = [
+    "director",
+    "starringActor",
+    "boxOfficeRevenue",
+    "yearReleased",
+    "oneSentencePlotSummary",
+];
+
 const game = `
 game {
     title
     developer
     yearReleased
-    plot
+    engine
+    oneSentencePlotSummary
 }
 `;
+
+const gameAttr = [
+    "developer",
+    "yearReleased",
+    "engine",
+    "oneSentencePlotSummary",
+];
 
 const album = `
 album {
@@ -59,6 +82,14 @@ album {
 }
 `;
 
+const albumAttr = [
+    "artist",
+    "length",
+    "numberOfTracks",
+    "copiesSold",
+    "yearReleased",
+];
+
 function getJsonStringTemplate(media) {
     switch (media) {
         case "book":
@@ -69,6 +100,21 @@ function getJsonStringTemplate(media) {
             return game;
         case "album":
             return album;
+        default:
+            throw new Error(`No such media: ${media}`);
+    }
+}
+
+function getStringAttributes(media) {
+    switch (media) {
+        case "book":
+            return bookAttr;
+        case "movie":
+            return movieAttr;
+        case "game":
+            return gameAttr;
+        case "album":
+            return albumAttr;
         default:
             throw new Error(`No such media: ${media}`);
     }
@@ -119,12 +165,13 @@ function getSpecificPrompt(media) {
 }
 
 function getPrompt(media, genre, previousTitles) {
+    const numEntries = "nine";
     const prev = previousTitles ?? "None used yet";
 
     const prompt = `
     You are hosting a trivia night.
 
-    Return only a **JSON Array** containing four ${media}s of the ${genre} genre.
+    Return only a **JSON Array** containing ${numEntries} ${media}s of the ${genre} genre.
 
     Do **not** include any explanation, text, or formatting outside the JSON.
 
@@ -132,7 +179,7 @@ function getPrompt(media, genre, previousTitles) {
 
     For each key in the following JSON template, use the **correct answer.**
 
-    Here is the JSON structure you must follow for each of the four ${media}s:
+    Here is the JSON structure you must follow for each of the ${numEntries} ${media}s:
     ${getJsonStringTemplate(media)}
     `;
     
@@ -140,7 +187,7 @@ function getPrompt(media, genre, previousTitles) {
     return prompt;
 }
 
-function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier) {
+function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier, mediaType) {
     const prev = previousQuestions ?? "None used yet";
 
     let diff;
@@ -152,6 +199,13 @@ function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier) {
         default:
             diff = "";
     }
+    
+    // Generate a random attribute                                                              // This gets pinged for every question, so AI never has the context
+    const mediaAttrs = getStringAttributes(mediaType);                                          // that ALL previous questions were about X attribute. This way,
+    if ((mediaType === "book" || mediaType === "game") && Math.random() > .4) {                 // we manually introduce an element of randomness. Games & books
+        const mediaAttr = mediaAttrs[mediaAttrs.length-1];                                      // also feel a little lacking, so basing them on the plot more often
+    }                                                                                           // makes the questions feel more varied.
+    const mediaAttr = mediaAttrs[Math.floor(Math.random() * mediaAttrs.length)];                
 
     const prompt = `
     You are hosting a trivia night.
@@ -167,6 +221,8 @@ function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier) {
     Here's an example: ${exampleQuestion}
 
     Make all incorrect answers plausible, and do not insert any jokes.
+
+    Create your question around the ${mediaAttr} attribute.
 
     Do not use any previously asked questions, or questions similar to these: ${prev}.
 

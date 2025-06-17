@@ -69,8 +69,8 @@ async function generateJSON(media, genre, key, prev) {
  * @param {*} prev titles already returned
  * @returns an object with array field containing a correct answer, three incorrect answers, and a question
  */
-async function generateQuestion(mediaObject, key, prev, difficultyModifier) {
-  const promptStr = mediaUtil.getQuestionPrompt(mediaObject, prev, difficultyModifier);
+async function generateQuestion(mediaObject, key, prev, difficultyModifier, mediaType) {
+  const promptStr = mediaUtil.getQuestionPrompt(mediaObject, prev, difficultyModifier, mediaType);
 
   return requestLayer(promptStr,0,key);
 }

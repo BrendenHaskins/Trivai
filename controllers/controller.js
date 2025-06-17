@@ -34,6 +34,7 @@ const question = async (req,res) => {
     const mediaObject = req.body?.mediaObject;
     const previous = req.body?.previous ?? [];
     const difficultyModifier = req.body?.difficulty ?? ""; 
+    const mediaType = req.body?.mediaType;
 
     if(!mediaObject || mediaObject.length == 0) {
         return res.status(400).send({ error: "incomplete request: expected mediaObject"});   
@@ -41,7 +42,7 @@ const question = async (req,res) => {
 
     try {
        const result = await conn
-       .generateQuestion(mediaObject, app.portableKey, previous, difficultyModifier);
+       .generateQuestion(mediaObject, app.portableKey, previous, difficultyModifier, mediaType);
 
        res.status(200).send(result);
     } catch(err) {

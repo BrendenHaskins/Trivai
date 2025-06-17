@@ -47,7 +47,8 @@ export const pretestInputPage = () => {
                 <label>Enter a genre: (A single word works better!)<br>
                 <input type="text" name="genre" required>
                 </label>
-                <button type="button" class="btn btn-primary" onclick="getPage('test/test-1')">Submit</button>
+                <br>
+                <button type="button" class="btn btn-primary mt-3" onclick="getPage('test/test-1')">Submit</button>
             </form>
         </div>
     `;
@@ -85,14 +86,14 @@ export const testOne = () => {
 }
 
 export const testTwo = () => {
-    const items = state.questions.slice(state.results.length);
+    const items = state.questions.slice(state.results.length); // Questions n onwards, where n is the last question answered
     return testBody(items, "results", "Submit");
 }
 
 const renderResult = (result) => {
-    const [question, answer, correct] = result;
+    const {question, answer, correct} = result;
     return /*html*/`
-        <tr>
+        <tr class="accent-lite">
             <td>${question}</td>
             <td>${answer}</td>
             <td>${correct}</td>
@@ -100,20 +101,20 @@ const renderResult = (result) => {
     `;
 }
 
-export const resultsPage = (results) => { // results = [ ["question", "playerAnswer", "correctAnswer"], ... ];
+export const resultsPage = () => { // results = [ ["question", "playerAnswer", "correctAnswer"], ... ];
     return /*html*/`
         ${navbar()}
         <div id="results" class="container">
-            <table class="accent-lite col table table-bordered p-2 mx-auto mt-4 w-50">
+            <table class="col table table-bordered p-2 mx-auto mt-4 w-50">
                 <thead>
-                    <tr>
-                        <th class="col-4">❓ Question</th>
+                    <tr class="accent-lite">
+                        <th class="col-4 text-center">❓ Question</th>
                         <th class="col-4">🙋 Your Answer</th>
                         <th class="col-4">✅ | ❌ Correct Answer</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${results.map(result => renderResult(result)).join('')}
+                    ${state.results.map(result => renderResult(result)).join('')}
                 </tbody>
             </table>
 

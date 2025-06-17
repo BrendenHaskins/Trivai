@@ -33,17 +33,31 @@ export const getQuestions = async () => {
     //     res.push(question[0]);
     // }
 
+    const payload = {};
+
+    if (state.questions.length > 1) {
+        const percentCorrect = state.results.reduce((grade, cur) => {
+            return grade + (cur.answer === cur.correct ? 1 : 0);
+        }) / state.results.length;
+        payload["difficulty"] = percentCorrect > 0.5 ? "hard" : "easy";
+        payload["previous"] = state.questions;
+    }
+    payload["mediaType"] = state.pretest.media;
+
+    console.log(payload);
+
     // Parallel - use for faster load times
     const res = await Promise.all(
         Object.values(state.inputMedia).map((media) =>
             fetch('/question', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mediaObject: media, mediaType: state.pretest.media }),
+            body: JSON.stringify({ ...payload, mediaObject: media }),
             }).then((res) => res.json())
-            .then((res) => res[0])
+            .then((res) => state.questions.push(res[0]))
         )
     );
+    console.log(state.questions);
     return res;
 }
 

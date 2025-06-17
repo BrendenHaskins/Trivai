@@ -165,7 +165,7 @@ function getSpecificPrompt(media) {
 }
 
 function getPrompt(media, genre, previousTitles) {
-    const numEntries = "nine";
+    const numEntries = "five";
     const prev = previousTitles ?? "None used yet";
 
     const prompt = `
@@ -191,12 +191,16 @@ function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier, m
     const prev = previousQuestions ?? "None used yet";
 
     let diff;
+    let answerDiff;
     switch(difficultyModifier) {
         case "easy":
+            answerDiff = "common";
             diff = "Please make the questions easier.";
         case "hard":
+            answerDiff = "uncommon";
             diff = "Please make the questions more difficult.";
         default:
+            answerDiff = "semi-common";
             diff = "";
     }
     
@@ -220,7 +224,11 @@ function getQuestionPrompt(mediaObject, previousQuestions, difficultyModifier, m
 
     Here's an example: ${exampleQuestion}
 
-    Make all incorrect answers plausible, and do not insert any jokes.
+    Do not insert any jokes.
+
+    Make sure all incorrect answers do not correctly answer the question.
+
+    Make sure all incorrect answers are ${answerDiff} answers to the question.
 
     Create your question around the ${mediaAttr} attribute.
 
